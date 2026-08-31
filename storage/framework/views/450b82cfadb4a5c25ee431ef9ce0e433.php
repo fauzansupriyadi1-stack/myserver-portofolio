@@ -63,15 +63,14 @@
                 
                 
                 <div class="relative rounded-3xl overflow-hidden group" style="height: 250px;">
-                    <div class="w-full h-full bg-gradient-to-br from-[#374151] to-[#1f2937]"></div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-20">
-                        <svg viewBox="0 0 100 100" class="w-20 h-20 text-white fill-current">
-                            <rect x="10" y="20" width="80" height="60" rx="8"/>
-                            <rect x="20" y="35" width="60" height="8" rx="3" fill="#A3E635"/>
-                            <rect x="20" y="50" width="40" height="8" rx="3"/>
-                        </svg>
-                    </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#111827]/90 to-transparent"></div>
+                    
+                    <img src="<?php echo e(asset('storage/skills_bg.jpg')); ?>" 
+                         alt="Skills Background" 
+                         class="absolute inset-0 w-full h-full object-cover"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    
+                    <div class="w-full h-full bg-gradient-to-br from-[#374151] to-[#1f2937]" style="display: none;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#111827]/95 via-[#111827]/60 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
                         <h3 class="text-white font-bold text-lg sm:text-xl mb-1">Skills</h3>
                         <p class="text-white/60 text-sm mb-4">
@@ -91,16 +90,14 @@
 
                 
                 <div class="relative rounded-3xl overflow-hidden group" style="height: 250px;">
-                    <div class="w-full h-full bg-gradient-to-br from-[#1E3A2B] to-[#0a1f13]"></div>
-                    <div class="absolute inset-0 flex items-center justify-center opacity-20">
-                        <svg viewBox="0 0 100 100" class="w-20 h-20 text-white fill-current">
-                            <rect x="25" y="10" width="50" height="80" rx="8"/>
-                            <rect x="35" y="25" width="30" height="6" rx="2" fill="#A3E635"/>
-                            <rect x="35" y="38" width="20" height="6" rx="2"/>
-                            <circle cx="50" cy="75" r="5"/>
-                        </svg>
-                    </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#0a1f13]/90 to-transparent"></div>
+                    
+                    <img src="<?php echo e(asset('storage/certifications_bg.jpg')); ?>" 
+                         alt="Certifications Background" 
+                         class="absolute inset-0 w-full h-full object-cover"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    
+                    <div class="w-full h-full bg-gradient-to-br from-[#1E3A2B] to-[#0a1f13]" style="display: none;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0a1f13]/95 via-[#0a1f13]/60 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
                         <h3 class="text-white font-bold text-lg sm:text-xl mb-1">Sertifikasi</h3>
                         <p class="text-white/60 text-sm mb-4">
