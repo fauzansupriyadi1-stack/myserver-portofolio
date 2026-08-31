@@ -67,14 +67,13 @@
                  onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.transform='translateY(0)';this.style.boxShadow='none';">
 
                 {{-- Cover/Thumbnail — klik untuk lihat full --}}
-                @if($cert->certificate_image_url || $cert->logo_url)
-                @php $coverImg = $cert->certificate_image_url ?? $cert->logo_url; @endphp
+                @if($cert->logo || $cert->certificate_image)
+                @php $coverImg = $cert->certificate_image ? asset('storage/'.$cert->certificate_image) : asset('storage/'.$cert->logo); @endphp
                 <div style="width:100%;height:180px;overflow:hidden;background:#0d1116;flex-shrink:0;cursor:zoom-in;position:relative;"
                      onclick="openLightbox('{{ $coverImg }}', '{{ $cert->name }}')">
                     <img src="{{ $coverImg }}"
                          alt="{{ $cert->name }}"
                          style="width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 0.4s;"
-                         onerror="this.parentElement.style.display='none'"
                          onmouseover="this.style.transform='scale(1.05)'"
                          onmouseout="this.style.transform='scale(1)'">
                     {{-- Zoom hint overlay --}}
@@ -120,8 +119,8 @@
                     <div style="margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.07);display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
 
                         {{-- Tombol Lihat Sertifikat --}}
-                        @if($cert->certificate_image_url || $cert->logo_url)
-                        @php $imgSrc = $cert->certificate_image_url ?? $cert->logo_url; @endphp
+                        @if($cert->certificate_image || $cert->logo)
+                        @php $imgSrc = $cert->certificate_image ? asset('storage/'.$cert->certificate_image) : asset('storage/'.$cert->logo); @endphp
                         <button onclick="openLightbox('{{ $imgSrc }}', '{{ $cert->name }}')"
                                 style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#A3E635;color:#111827;font-size:0.75rem;font-weight:800;border-radius:999px;border:none;cursor:pointer;transition:all 0.2s;"
                                 onmouseover="this.style.background='#c4f542';this.style.transform='scale(1.03)'"

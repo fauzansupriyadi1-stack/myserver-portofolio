@@ -55,12 +55,4 @@ class Certification extends Model
         }
         return asset('storage/' . $this->logo);
     }
-
-    public function getCertificateImageUrlAttribute(): ?string
-    {
-        if (!$this->certificate_image) {
-            return null;
-        }
-        return asset('storage/' . $this->certificate_image);
-    }
 }
