@@ -31,6 +31,7 @@ class AboutForm
                 FileUpload::make('image_path')
                     ->label('Gambar')
                     ->image()
+                    ->disk('public')
                     ->directory('about')
                     ->nullable()
                     ->columnSpanFull(),
