@@ -1,54 +1,55 @@
 #!/bin/bash
 
 # ===================================================================
-# SCRIPT FIX LOGIN CLOUDFLARE TUNNEL
-# ===================================================================
-# Script ini akan fix masalah login di porto.fauzan.online
-# Jalankan di server dengan: chmod +x fix-login.sh && ./fix-login.sh
+# FIX UPLOAD SLOW - Increase PHP Limits
 # ===================================================================
 
-echo "🔧 Fix Login untuk porto.fauzan.online"
-echo "======================================"
+echo "🔧 Fix Upload Slow Problem"
+echo "==========================="
 echo ""
 
 cd /var/www/myserver-portofolio
 
-# Backup .env
-echo "📦 Backup .env..."
-cp .env .env.backup.fix.$(date +%Y%m%d_%H%M%S)
+# Copy php.ini ke server
+echo "📦 Setting PHP limits..."
 
-# Fix SESSION_DOMAIN
-echo "🔧 Fixing SESSION_DOMAIN..."
-sed -i 's/SESSION_DOMAIN=.*/SESSION_DOMAIN=porto.fauzan.online/' .env
+# Update systemd service dengan php.ini custom
+cat > /etc/systemd/system/laravel-portfolio.service <<EOF
+[Unit]
+Description=Laravel Portfolio Application
+After=network.target
 
-# Fix SESSION_SECURE_COOKIE
-echo "🔧 Fixing SESSION_SECURE_COOKIE..."
-sed -i 's/SESSION_SECURE_COOKIE=.*/SESSION_SECURE_COOKIE=false/' .env
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/myserver-portofolio
+ExecStart=/usr/bin/php -c /var/www/myserver-portofolio/php-upload.ini artisan serve --host=0.0.0.0 --port=8000
+Restart=always
+RestartSec=3
 
-# Verify changes
-echo ""
-echo "✅ Perubahan yang dilakukan:"
-echo "----------------------------"
-grep "SESSION_DOMAIN" .env
-grep "SESSION_SECURE_COOKIE" .env
-echo ""
+[Install]
+WantedBy=multi-user.target
+EOF
 
-# Clear cache
-echo "🧹 Clear cache..."
-php artisan config:clear
-php artisan cache:clear
-php artisan optimize
+echo "✅ Service file updated with custom php.ini"
+
+# Reload systemd
+systemctl daemon-reload
+
+# Restart service
+echo "🔄 Restarting service..."
+pkill -f "php artisan serve"
+sleep 2
+
+# Start dengan php.ini custom
+php -c php-upload.ini artisan serve --host=0.0.0.0 --port=8000 &
 
 echo ""
-echo "🔄 Restart service..."
-systemctl restart laravel-portfolio
-
+echo "✅ Upload limits increased:"
+echo "   upload_max_filesize: 100M"
+echo "   post_max_size: 100M"
+echo "   max_execution_time: 300s"
+echo "   memory_limit: 512M"
 echo ""
-echo "✅ SELESAI!"
-echo ""
-echo "🌐 Test login di: https://porto.fauzan.online/admin"
-echo "📧 Email: fauzansupriyadi1@gmail.com"
-echo "🔑 Password: 343422"
-echo ""
-echo "🎉 Tombol Masuk sekarang harusnya work!"
+echo "🌐 Test upload di: https://porto.fauzan.online/admin"
 echo ""
