@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Fix Upload Permissions",
+      "trigger": "PostFileCreate",
+      "description": "Automatically fix file permissions after upload to prevent 403 Forbidden errors",
+      "matcher": "storage/app/public",
+      "action": {
+        "type": "command",
+        "command": "cd /var/www/myserver-portofolio && chmod -R 755 storage/app/public && find storage/app/public -type f -exec chmod 644 {} \\; && chown -R root:root storage/app/public 2>/dev/null && chmod -R 755 public/storage && find public/storage -type f -exec chmod 644 {} \\; && chown -R root:root public/storage 2>/dev/null",
+        "timeout": 30
+      }
+    }
+  ]
+}
