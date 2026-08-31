@@ -43,6 +43,7 @@ class SkillForm
                 FileUpload::make('image_path')
                     ->label('Gambar/Logo Skill (Opsional)')
                     ->image()
+                    ->disk('public')
                     ->directory('skills')
                     ->maxSize(5120)
                     ->helperText('Ukuran maksimal 5MB. Jika diisi, gambar akan ditampilkan menggantikan icon emoji.')

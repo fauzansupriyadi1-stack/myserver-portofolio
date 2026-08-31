@@ -48,6 +48,7 @@ class ProjectForm
                 FileUpload::make('image_path')
                     ->label('Gambar Project')
                     ->image()
+                    ->disk('public')
                     ->directory('projects')
                     ->maxSize(5120)
                     ->helperText('Ukuran maksimal 5MB. Format: JPG, PNG, WebP')
