@@ -365,6 +365,114 @@ sudo chmod 644 /var/www/portfolio/public/storage/*.jpg
 
 ---
 
+## ☁️ Step 8: Cloudflare Tunnel Configuration (Optional)
+
+If you're using Cloudflare Tunnel to expose your local server to the internet, follow these steps:
+
+### Setup Cloudflare Tunnel
+
+1. **Install Cloudflare Tunnel (cloudflared)**:
+```bash
+# Download cloudflared
+wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb
+sudo dpkg -i cloudflared-linux-arm64.deb
+```
+
+2. **Authenticate with Cloudflare**:
+```bash
+cloudflared tunnel login
+```
+
+3. **Create a Tunnel**:
+```bash
+cloudflared tunnel create portfolio
+```
+
+4. **Configure the Tunnel**:
+```bash
+nano ~/.cloudflared/config.yml
+```
+
+Add:
+```yaml
+tunnel: <TUNNEL-ID>
+credentials-file: /root/.cloudflared/<TUNNEL-ID>.json
+
+ingress:
+  - hostname: yourdomain.com
+    service: http://localhost:8000
+  - service: http_status:404
+```
+
+5. **Route DNS**:
+```bash
+cloudflared tunnel route dns portfolio yourdomain.com
+```
+
+6. **Run Tunnel as Service**:
+```bash
+sudo cloudflared service install
+sudo systemctl start cloudflared
+sudo systemctl enable cloudflared
+```
+
+### Configure Laravel for Cloudflare Tunnel
+
+1. **Copy Cloudflare environment template**:
+```bash
+cd /var/www/portfolio
+cp .env.cloudflare.example .env.cloudflare
+nano .env.cloudflare
+```
+
+2. **Update these values** (replace `yourdomain.com` with your actual domain):
+```env
+APP_URL=https://yourdomain.com
+ASSET_URL=https://yourdomain.com
+SESSION_DOMAIN=.yourdomain.com
+SESSION_SECURE_COOKIE=true
+SANCTUM_STATEFUL_DOMAINS=yourdomain.com
+```
+
+3. **Merge with your .env**:
+```bash
+# Backup current .env
+cp .env .env.backup
+
+# Update specific values or manually copy from .env.cloudflare
+nano .env
+```
+
+4. **Clear cache**:
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan optimize
+```
+
+### Important Notes for Cloudflare Tunnel:
+
+- ✅ `TrustProxies.php` is already configured to trust all proxies
+- ✅ All X-Forwarded headers are properly handled
+- ✅ HTTPS is enforced for secure cookies
+- ⚠️ Make sure `SESSION_DOMAIN` starts with a dot (`.yourdomain.com`)
+- ⚠️ Make sure `SESSION_SECURE_COOKIE=true` for HTTPS
+- ⚠️ After any `.env` changes, always run `php artisan config:clear`
+
+### Verify Cloudflare Tunnel is Working:
+
+```bash
+# Check tunnel status
+sudo systemctl status cloudflared
+
+# Check tunnel logs
+sudo journalctl -u cloudflared -f
+```
+
+Access your site at: `https://yourdomain.com`
+
+---
+
 ## 🔐 Security Best Practices
 
 1. **Disable PHP Functions** (in php.ini):
